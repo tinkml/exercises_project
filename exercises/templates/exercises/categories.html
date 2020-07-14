@@ -1,0 +1,20 @@
+{% extends 'exercises/base.html' %}
+
+{% block content%}
+{% include 'exercises/includes/users_login_status.html' %}
+<form action="task" class="form" method="post">
+    {% csrf_token %}
+
+    <select name="categories">
+        {% for category in categories %}
+            <option value="{{ category.url }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+    <select name="level">
+        {% for level in levels %}
+            <option value="{{ level }}">{{ level }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="show_task" name="show_task">
+</form>
+{% endblock%}

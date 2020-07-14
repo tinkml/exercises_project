@@ -23,7 +23,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'exercises'
+    'django.contrib.sites',
+    'exercises',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.vk',
 ]
 
 MIDDLEWARE = [
@@ -87,6 +92,19 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+LOGIN_REDIRECT_URL = '/categories'
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+SITE_ID = 1
 
 
 

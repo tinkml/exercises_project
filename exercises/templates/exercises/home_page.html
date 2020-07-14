@@ -1,0 +1,6 @@
+{% extends 'exercises/base.html' %}
+
+{% block content%}
+    {% include 'exercises/includes/users_login_status.html' %}
+    <a href="{% url 'categories' %}">Choose categories</a>
+{% endblock%}

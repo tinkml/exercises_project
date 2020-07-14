@@ -1,5 +1,5 @@
 from django.db.models import Min, Max
-from .models import Tasks
+from .models import Task
 from random import randint
 
 
@@ -11,8 +11,8 @@ def create_tasks_unique_url(request, vars_list, task, category_url, level):
 
 
 def get_task_id_range(url_of_category):
-    min_id = Tasks.objects.filter(category__url=url_of_category).aggregate(Min('id'))['id__min']
-    max_id = Tasks.objects.filter(category__url=url_of_category).aggregate(Max('id'))['id__max']
+    min_id = Task.objects.filter(category__url=url_of_category).aggregate(Min('id'))['id__min']
+    max_id = Task.objects.filter(category__url=url_of_category).aggregate(Max('id'))['id__max']
     return min_id, max_id
 
 
@@ -36,5 +36,5 @@ def get_level_and_category_url(request):
 def get_random_task(category_url):
     min_id, max_id = get_task_id_range(category_url)
     random_id = randint(min_id, max_id)
-    task = Tasks.objects.filter(category__url=category_url).get(id=random_id)
+    task = Task.objects.filter(category__url=category_url).get(id=random_id)
     return task

@@ -1,18 +1,11 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Task</title>
-</head>
-<body>
-    {% include 'exercises/includes/users_login_status.html' %}
-    <p>{{ level }} / {{ solved }}</p>
+{% extends 'exercises/base.html' %}
+
+{% block content%}
+    <p>{% include 'exercises/includes/users_login_status.html' %}</p>
+    <p>Level: {{ level }}</p>
+    <p>Solved: {{ solved }}</p>
     <p>{{ description }}</p>
     <p>Ответ {{ answer }}</p>
-    {{ err }}
     <form action="" class="form" method="post">
         {% csrf_token %}
         <input type="text" value="" name="answer">
@@ -20,5 +13,5 @@
         <input type="submit" value="return" name="return">
         <input type="submit" value="copy" name="copy">
     </form>
-</body>
-</html>
+    {{ error }}
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TasksCategory, Tasks, UsersCategoryLevel
+from .models import Category, Task, UsersCategoryLevel
 
 
-admin.site.register((TasksCategory, Tasks, UsersCategoryLevel))
+admin.site.register((Category, Task, UsersCategoryLevel))

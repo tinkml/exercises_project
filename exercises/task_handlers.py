@@ -4,10 +4,10 @@ import math
 
 def create_numbers_conversion_task(task, level):
     var = randint(level ** 10, 256 ** level)
-    if task.name == 'Number to decimal':
+    if task.url == 'number_to_decimal':
         vars_list = [hex(var) if var % randint(1, 5) == 0 else bin(var)]
         answer = var
-    elif task.name == 'Number to hexadecimal':
+    elif task.url == 'number_to_hexadecimal':
         vars_list = [var if var % randint(1, 5) == 0 else bin(var)]
         answer = hex(var)
     else:

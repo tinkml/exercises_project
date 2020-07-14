@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 
-from .models import TasksCategory, UsersCategoryLevel
+from .models import Category, UsersCategoryLevel
 from .task_handlers import *
 from .views_handlers import *
 
@@ -56,54 +56,20 @@ functions = {
 }
 
 
-def sign_up_user(request):
-    user_data = {'form': UserCreationForm(), 'error': ''}
-    if request.method == 'GET':
-        return render(request, 'exercises/sign_up.html', context=user_data)
-    else:
-        user_name = request.POST.get('username')
-        password_1 = request.POST.get('password1')
-        password_2 = request.POST.get('password2')
-        if password_1 == password_2:
-            try:
-                user = User.objects.create_user(username=user_name, password=password_1)
-                user.save()
-                login(request, user)
-                return show_categories(request)
-            except IntegrityError:
-                user_data['error'] = 'The user with this username has been already created'
-                return render(request, 'exercises/sign_up.html', context=user_data)
-        else:
-            user_data['error'] = 'The passwords are didn''t matched'
-            return render(request, 'exercises/sign_up.html', context=user_data)
-
-
 def log_out_user(request):
     if request.method == 'POST':
         logout(request)
-        return show_categories(request)
+        return redirect('/categories')
 
 
-def log_in_user(request):
-    user_data = {'form': AuthenticationForm(), 'error': ''}
-    if request.method == 'GET':
-        return render(request, 'exercises/log_in.html', context=user_data)
-    else:
-        user_name = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=user_name, password=password)
-        if user is None:
-            user_data['error'] = 'Username and password is didn''t match'
-            return render(request, 'exercises/log_in.html', context=user_data)
-        else:
-            login(request, user)
-            return show_categories(request)
+def show_home_page(request):
+    return render(request, 'exercises/home_page.html')
 
 
 def show_categories(request):
-    categories = TasksCategory.objects.all()
+    categories = Category.objects.all()
     levels = range(1, 11)
-    return render(request, 'exercises/tasks_list.html', {'categories': categories, 'levels': levels})
+    return render(request, 'exercises/categories.html', {'categories': categories, 'levels': levels})
 
 
 answer = ''
@@ -118,7 +84,7 @@ USER = ''
 
 
 def show_task_from_url(request, category, lvl, task_url, vars_str):
-    global answer, category_url, description, level
+    global answer, category_url, description, level, solved_tasks
 
     category_url = category
     level = int(lvl)
@@ -127,18 +93,19 @@ def show_task_from_url(request, category, lvl, task_url, vars_str):
         'answer': answer,
         'level': level,
         'solved': solved_tasks,
-        'err': ''}
+        'error': ''}
 
     user_answer = request.POST.get('answer')
     if user_answer:
         if user_answer == str(answer):
+            solved_tasks += 1
             return redirect('/task')
         else:
-            data['err'] = 'err'
+            data['error'] = 'Your answer is not correct. Don''t worry and try again!'
 
     vars_list = vars_str.split('_') if '_' in vars_str else [vars_str]
     if description == '' and answer == '':
-        description = Tasks.objects.get(url=task_url).description.format(*vars_list)
+        description = Task.objects.get(url=task_url).description.format(*vars_list)
         answer = functions[category_url]['get_answer'](task_url, vars_list)
 
     return render(request, 'exercises/task.html', context=data)
@@ -151,7 +118,7 @@ def get_task(request):
         answer = category_url = description = unique_url = ''
         level = 1
         solved_tasks = 0
-        return show_categories(request)
+        return redirect('/categories')
 
     if request.POST.get('copy'):
         pyperclip.copy(unique_url)
@@ -168,17 +135,17 @@ def get_task(request):
                 level, solved_tasks = increasing_difficulty_level(solved_tasks)
             else:
                 level, solved_tasks = increasing_difficulty_level(solved_tasks)
-                data['err'] = ''
+                data['error'] = ''
         else:
-            data['err'] = 'err'
+            data['error'] = 'Your answer is not correct. Don''t worry and try again!'
+            print(data)
             return render(request, 'exercises/task.html', context=data)
 
     if user_answer is None and request.method == 'POST':
-        # category_url, level = get_level_and_category_url(request)
         category_url = request.POST.get('categories')
         if request.user.is_authenticated:
             USER = User.objects.get(id=request.user.id)
-            CATEGORY = TasksCategory.objects.get(url=category_url)
+            CATEGORY = Category.objects.get(url=category_url)
             object_in_bd = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).exists()
             if not object_in_bd:
                 user_category_level = UsersCategoryLevel()
@@ -203,6 +170,6 @@ def get_task(request):
         'answer': answer,
         'level': level,
         'solved': solved_tasks,
-        'err': ''}
+        'error': ''}
 
     return render(request, 'exercises/task.html', context=data)
