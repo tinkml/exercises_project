@@ -55,14 +55,6 @@ functions = {
         'get_answer': get_numeric_limits_answer},
 }
 
-answer = ''
-category_url = ''
-data = {}
-description = ''
-level = None or 1
-solved_tasks = 0
-unique_url = ''
-
 
 def sign_up_user(request):
     user_data = {'form': UserCreationForm(), 'error': ''}
@@ -114,6 +106,17 @@ def show_categories(request):
     return render(request, 'exercises/tasks_list.html', {'categories': categories, 'levels': levels})
 
 
+answer = ''
+category_url = ''
+data = {}
+description = ''
+level = None or 1
+solved_tasks = 0
+unique_url = ''
+CATEGORY = ''
+USER = ''
+
+
 def show_task_from_url(request, category, lvl, task_url, vars_str):
     global answer, category_url, description, level
 
@@ -142,7 +145,7 @@ def show_task_from_url(request, category, lvl, task_url, vars_str):
 
 
 def get_task(request):
-    global answer, category_url, data, description, level, solved_tasks, unique_url
+    global answer, CATEGORY, category_url, data, description, level, solved_tasks, unique_url, USER
 
     if request.POST.get('return'):
         answer = category_url = description = unique_url = ''
@@ -157,19 +160,38 @@ def get_task(request):
     user_answer = request.POST.get('answer')
     if user_answer:
         if user_answer == answer:
-            # TODO обновить соответсвующий объект модели UsersCategoryLevel, если user авторизирован
-            data['err'] = ''
-            level, solved_tasks = increasing_difficulty_level(level, solved_tasks)
+            if request.user.is_authenticated:
+                user_category_level = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).get()
+                user_category_level.solved_tasks += 1
+                solved_tasks = user_category_level.solved_tasks
+                user_category_level.save()
+                level, solved_tasks = increasing_difficulty_level(solved_tasks)
+            else:
+                level, solved_tasks = increasing_difficulty_level(solved_tasks)
+                data['err'] = ''
         else:
             data['err'] = 'err'
             return render(request, 'exercises/task.html', context=data)
 
     if user_answer is None and request.method == 'POST':
-        category_url, level = get_level_and_category_url(request)
-        user_id = request.user.id
-        category_id = TasksCategory.objects.get(url=category_url).id
-        print(f'===== User id = {user_id}, Category id = {category_id} =====')
-        # TODO Создать объект модели UsersCategoryLevel
+        # category_url, level = get_level_and_category_url(request)
+        category_url = request.POST.get('categories')
+        if request.user.is_authenticated:
+            USER = User.objects.get(id=request.user.id)
+            CATEGORY = TasksCategory.objects.get(url=category_url)
+            object_in_bd = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).exists()
+            if not object_in_bd:
+                user_category_level = UsersCategoryLevel()
+                user_category_level.user = USER
+                user_category_level.category = CATEGORY
+                user_category_level.solved_tasks = 0
+                user_category_level.save()
+            else:
+                user_category_level = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).get()
+                solved_tasks = user_category_level.solved_tasks
+                level, solved_tasks = increasing_difficulty_level(solved_tasks)
+        else:
+            level = int(request.POST.get('level'))
 
     task = get_random_task(category_url)
     new_tasks_handler = functions[category_url]['create_task']

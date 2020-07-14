@@ -16,13 +16,15 @@ def get_task_id_range(url_of_category):
     return min_id, max_id
 
 
-def increasing_difficulty_level(current_level, passed_tasks):
+def increasing_difficulty_level(passed_tasks):
     passed_tasks += 1
-    if current_level == 10:
-        return current_level, passed_tasks
+    if passed_tasks // 5 >= 10:
+        next_level = 10
+    elif passed_tasks <= 5:
+        next_level = 1
     else:
-        next_level = passed_tasks / 5 + 1 if passed_tasks % 5 == 0 else current_level
-        return next_level, passed_tasks
+        next_level = passed_tasks // 5 + 1
+    return next_level, passed_tasks
 
 
 def get_level_and_category_url(request):
