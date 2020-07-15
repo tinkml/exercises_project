@@ -1,0 +1,12 @@
+a:hover {
+    text-decoration: none;
+}
+
+.btn-primary-soft {
+    background-color: rgba(51,94,234,.1);
+    color: #335eea;
+}
+
+.shadow {
+    box-shadow: 0 .5rem 1.5rem rgba(22,28,45,.1)!important;
+}

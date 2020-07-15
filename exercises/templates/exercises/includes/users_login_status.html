@@ -1,19 +1,15 @@
-{% block content %}
-
-    {% if user.is_authenticated %}
-        <p>{{ user.username }} is Logged In</p>
-        <p>
+{% block header %}
+    <div>
+        {% if user.is_authenticated %}
+            {{ user.username }} is Logged In
             <form action="logout" method="POST">
                 {% csrf_token %}
                 <input type="submit" value="log_out" name="log_out">
             </form>
-        </p>
-    {% else %}
-<!--        <a href="{# url 'signup' #}">sign up</a>-->
-        <a href="{% url 'account_signup' %}">sign up</a>
-<!--        <a href="{# url 'login' #}">log in</a>-->
-        <a href="{% url 'account_login' %}">log in</a>
-    {% endif %}
-
+        {% else %}
+            <a href="{% url 'account_signup' %}">sign up</a>
+            <a href="{% url 'account_login' %}">log in</a>
+        {% endif %}
+    </div>
 {% endblock %}
 

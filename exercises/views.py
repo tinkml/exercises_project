@@ -88,10 +88,12 @@ def show_task_from_url(request, category, lvl, task_url, vars_str):
     level = int(lvl)
     data = {
         'description': description,
-        'answer': answer,
         'level': level,
-        'solved': solved_tasks,
-        'error': ''}
+        'solved': solved_tasks}
+
+    if request.POST.get('get_answer'):
+        data['answer'] = f'Answer: {answer}'
+        return render(request, 'exercises/task.html', context=data)
 
     user_answer = request.POST.get('answer')
     if user_answer:
@@ -122,6 +124,10 @@ def get_task(request):
         pyperclip.copy(unique_url)
         return render(request, 'exercises/task.html', context=data)
 
+    if request.POST.get('get_answer'):
+        data['answer'] = f'Answer: {answer}'
+        return render(request, 'exercises/task.html', context=data)
+
     user_answer = request.POST.get('answer')
     if user_answer:
         if user_answer == answer:
@@ -133,7 +139,6 @@ def get_task(request):
                 level, solved_tasks = increasing_difficulty_level(solved_tasks)
             else:
                 level, solved_tasks = increasing_difficulty_level(solved_tasks)
-                data['error'] = ''
         else:
             data['error'] = 'Your answer is not correct. Don''t worry and try again!'
             print(data)
@@ -165,9 +170,7 @@ def get_task(request):
 
     data = {
         'description': description,
-        'answer': answer,
         'level': level,
-        'solved': solved_tasks,
-        'error': ''}
+        'solved': solved_tasks}
 
     return render(request, 'exercises/task.html', context=data)

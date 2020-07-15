@@ -1,6 +1,23 @@
 {% extends 'exercises/base.html' %}
 
 {% block content%}
-    {% include 'exercises/includes/users_login_status.html' %}
-    <a href="{% url 'categories' %}">Choose categories</a>
+<div class="row">
+    <div class="col-12 col-md-5 col-lg-7 order-md-1 py-4">
+        <h1 class="display-4 text-center text-md-left">
+            Welcome to
+            <span class="text-primary">Mongoose EP</span>.
+            <br>Discover IT with us.</br>
+        </h1>
+        <div class="mt-4">
+            <a href="{% url 'account_signup' %}" class="btn-lg btn-primary shadow lift mr-3">
+                Sign up
+            </a>
+            <a href="{% url 'categories' %}" class="btn-lg btn-primary-soft">Start learning</a>
+        </div>
+    </div>
+    <div class="col-12 col-md-5 col-lg-5 order-md-2">
+        {% load static %}
+        <img src="{% static 'images/illustration-8.png' %}" class="img-fluid mw-md-150 mw-lg-130 mb-6 mb-md-0">
+    </div>
+</div>
 {% endblock%}

@@ -1,17 +1,29 @@
 {% extends 'exercises/base.html' %}
 
 {% block content%}
-    <p>{% include 'exercises/includes/users_login_status.html' %}</p>
-    <p>Level: {{ level }}</p>
-    <p>Solved: {{ solved }}</p>
-    <p>{{ description }}</p>
-    <p>Ответ {{ answer }}</p>
-    <form action="" class="form" method="post">
-        {% csrf_token %}
-        <input type="text" value="" name="answer">
-        <input type="submit" value="send" name="send">
-        <input type="submit" value="return" name="return">
-        <input type="submit" value="copy" name="copy">
-    </form>
-    {{ error }}
+
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6">
+            <p>Level: {{ level }}</p>
+            <p>Solved: {{ solved }}</p>
+            <h2 class="text-center">{{ description }}</h2>
+            <p>{{ answer }}</p>
+            <form action="" class="form" method="post">
+                {% csrf_token %}
+                <input type="text" value="" name="answer" class="form-control form-control-lg">
+                <input type="submit" value="send" name="send" class="btn ">
+                <input type="submit" value="return" name="return" class="btn">
+                <input type="submit" value="copy" name="copy" class="btn">
+                <input type="submit" value="get_answer" name="get_answer" class="btn">
+            </form>
+        </div>
+    </div>
+    {% if error is not None %}
+        <div class="alert alert-soft alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -1,10 +1,8 @@
 {% extends 'exercises/base.html' %}
 
 {% block content%}
-{% include 'exercises/includes/users_login_status.html' %}
 <form action="task" class="form" method="post">
     {% csrf_token %}
-
     <select name="categories">
         {% for category in categories %}
             <option value="{{ category.url }}">{{ category }}</option>
