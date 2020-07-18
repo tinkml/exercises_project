@@ -7,14 +7,27 @@
             <p>Level: {{ level }}</p>
             <p>Solved: {{ solved }}</p>
             <h2 class="text-center">{{ description }}</h2>
-            <p>{{ answer }}</p>
             <form action="" class="form" method="post">
                 {% csrf_token %}
                 <input type="text" value="" name="answer" class="form-control form-control-lg">
                 <input type="submit" value="send" name="send" class="btn ">
                 <input type="submit" value="return" name="return" class="btn">
-                <input type="submit" value="copy" name="copy" class="btn">
-                <input type="submit" value="get_answer" name="get_answer" class="btn">
+                <input type="hidden" value="{{ category_url }}" name="category_url">
+                <input type="hidden" value="{{ correct_answer }}" name="correct_answer">
+                <input type="hidden" value="{{ description }}" name="description">
+                <input type="hidden" value="{{ level }}" name="level">
+                <input type="hidden" value="{{ solved }}" name="solved">
+                <input type="hidden" value="{{ unique_url }}" name="unique_url">
+                <a class="btn" data-toggle="collapse" href="#collapseAnswer" role="button" aria-expanded="false" aria-controls="collapseAnswer">
+                Get answer</a>
+                <a class="btn" data-toggle="collapse" href="#collapseUniqueUrl" role="button" aria-expanded="false" aria-controls="collapseUniqueUrl">
+                Copy</a>
+                <div class="collapse" id="collapseAnswer">
+                {{ correct_answer }}
+                </div>
+                <div class="collapse" id="collapseUniqueUrl">
+                {{ unique_url }}
+                </div>
             </form>
         </div>
     </div>
@@ -26,4 +39,5 @@
             </button>
         </div>
     {% endif %}
+
 {% endblock %}

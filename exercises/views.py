@@ -1,4 +1,3 @@
-import pyperclip
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
@@ -70,82 +69,43 @@ def show_categories(request):
     return render(request, 'exercises/categories.html', {'categories': categories, 'levels': levels})
 
 
-answer = ''
-category_url = ''
-data = {}
-description = ''
-level = None or 1
-solved_tasks = 0
-unique_url = ''
-CATEGORY = ''
-USER = ''
-
-
 def show_task_from_url(request, category, lvl, task_url, vars_str):
-    global answer, category_url, description, level, solved_tasks
 
     category_url = category
     level = int(lvl)
-    data = {
-        'description': description,
-        'level': level,
-        'solved': solved_tasks}
-
-    if request.POST.get('get_answer'):
-        data['answer'] = f'Answer: {answer}'
-        return render(request, 'exercises/task.html', context=data)
 
     user_answer = request.POST.get('answer')
     if user_answer:
-        if user_answer == str(answer):
-            solved_tasks += 1
-            return redirect('/task')
+        correct_asnwer = request.POST.get('correct_answer')
+        if user_answer == correct_asnwer:
+            return redirect('/categories')
         else:
-            data['error'] = 'Your answer is not correct. Don''t worry and try again!'
+            data = create_error_data(request, category_url)
+            return render(request, 'exercises/task.html', context=data)
 
     vars_list = vars_str.split('_') if '_' in vars_str else [vars_str]
-    if description == '' and answer == '':
-        description = Task.objects.get(url=task_url).description.format(*vars_list)
-        answer = functions[category_url]['get_answer'](task_url, vars_list)
+    description = Task.objects.get(url=task_url).description.format(*vars_list)
+    correct_answer = functions[category_url]['get_answer'](task_url, vars_list)
+
+    data = {
+        'description': description,
+        'level': level,
+        'solved': '0',
+        'correct_answer': correct_answer,
+        'category_url': category_url}
 
     return render(request, 'exercises/task.html', context=data)
 
 
 def get_task(request):
-    global answer, CATEGORY, category_url, data, description, level, solved_tasks, unique_url, USER
 
     if request.POST.get('return'):
-        answer = category_url = description = unique_url = ''
-        level = 1
-        solved_tasks = 0
         return redirect('/categories')
 
-    if request.POST.get('copy'):
-        pyperclip.copy(unique_url)
-        return render(request, 'exercises/task.html', context=data)
-
-    if request.POST.get('get_answer'):
-        data['answer'] = f'Answer: {answer}'
-        return render(request, 'exercises/task.html', context=data)
-
     user_answer = request.POST.get('answer')
-    if user_answer:
-        if user_answer == answer:
-            if request.user.is_authenticated:
-                user_category_level = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).get()
-                user_category_level.solved_tasks += 1
-                solved_tasks = user_category_level.solved_tasks
-                user_category_level.save()
-                level, solved_tasks = increasing_difficulty_level(solved_tasks)
-            else:
-                level, solved_tasks = increasing_difficulty_level(solved_tasks)
-        else:
-            data['error'] = 'Your answer is not correct. Don''t worry and try again!'
-            print(data)
-            return render(request, 'exercises/task.html', context=data)
-
     if user_answer is None and request.method == 'POST':
         category_url = request.POST.get('categories')
+
         if request.user.is_authenticated:
             USER = User.objects.get(id=request.user.id)
             CATEGORY = Category.objects.get(url=category_url)
@@ -156,21 +116,46 @@ def get_task(request):
                 user_category_level.category = CATEGORY
                 user_category_level.solved_tasks = 0
                 user_category_level.save()
+                solved_tasks = 0
+                level = int(request.POST.get('level'))
             else:
                 user_category_level = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).get()
                 solved_tasks = user_category_level.solved_tasks
                 level, solved_tasks = increasing_difficulty_level(solved_tasks)
         else:
+            solved_tasks = 0
             level = int(request.POST.get('level'))
+
+    if user_answer:
+        correct_answer = request.POST.get('correct_answer')
+        category_url = request.POST.get('category_url')
+        if user_answer == correct_answer:
+            if request.user.is_authenticated:
+                USER = User.objects.get(id=request.user.id)
+                CATEGORY = Category.objects.get(url=category_url)
+                user_category_level = UsersCategoryLevel.objects.filter(user=USER, category=CATEGORY).get()
+                user_category_level.solved_tasks += 1
+                solved_tasks = user_category_level.solved_tasks
+                user_category_level.save()
+                level, solved_tasks = increasing_difficulty_level(solved_tasks)
+            else:
+                solved_tasks = int(request.POST.get('solved'))
+                level, solved_tasks = increasing_difficulty_level(solved_tasks)
+        else:
+            data = create_error_data(request, category_url)
+            return render(request, 'exercises/task.html', context=data)
 
     task = get_random_task(category_url)
     new_tasks_handler = functions[category_url]['create_task']
-    description, answer, vars_list = new_tasks_handler(task, level)
+    description, correct_answer, vars_list = new_tasks_handler(task, level)
     unique_url = create_tasks_unique_url(request, vars_list, task, category_url, level)
 
     data = {
         'description': description,
         'level': level,
-        'solved': solved_tasks}
+        'solved': solved_tasks,
+        'correct_answer': correct_answer,
+        'category_url': category_url,
+        'unique_url': unique_url}
 
     return render(request, 'exercises/task.html', context=data)

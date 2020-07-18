@@ -38,3 +38,21 @@ def get_random_task(category_url):
     random_id = randint(min_id, max_id)
     task = Task.objects.filter(category__url=category_url).get(id=random_id)
     return task
+
+
+def create_error_data(request, category_url):
+    description = request.POST.get('description')
+    correct_answer = request.POST.get('correct_answer')
+    level = request.POST.get('level')
+    solved_tasks = request.POST.get('solved')
+    unique_url = request.POST.get('unique_url')
+    error = 'Your answer is not correct. Don''t worry and try again!'
+    data = {
+        'description': description,
+        'level': level,
+        'solved': solved_tasks or 0,
+        'correct_answer': correct_answer,
+        'category_url': category_url,
+        'unique_url': unique_url,
+        'error': error}
+    return data
