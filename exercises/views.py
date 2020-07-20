@@ -185,7 +185,10 @@ def get_task(request):
             user_log.info(f'[USER_ID] {request.user.id} ----- [DATA] {data}')
             return render(request, 'exercises/task.html', context=data)
 
-    task = get_random_task(category_url)
+    try:
+        task = get_random_task(category_url)
+    except TypeError:
+        return redirect('/none_task')
     views_log.debug(f'[RANDOM_TASK] {task}')
     new_tasks_handler = functions[category_url]['create_task']
     views_log.debug(f'[TASK_HANDLER] {new_tasks_handler}')
@@ -203,3 +206,7 @@ def get_task(request):
 
     views_log.debug(f'[NEW_TASKS_DATA_CREATED]\n')
     return render(request, 'exercises/task.html', context=data)
+
+
+def none_task(request):
+    return render(request, 'exercises/none_task_error.html')
