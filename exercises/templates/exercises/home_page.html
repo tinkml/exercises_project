@@ -2,17 +2,19 @@
 
 {% block content%}
 <div class="row">
-    <div class="col-12 col-md-5 col-lg-7 order-md-1 py-4">
+    <div class="col-12 col-md-5 col-lg-7 order-md-1 pb-4">
         <h1 class="display-4 text-center text-md-left">
             Welcome to
             <span class="text-primary">Mongoose EP</span>.
             <br>Discover IT with us.</br>
         </h1>
-        <div class="mt-4">
-            <a href="{% url 'account_signup' %}" class="btn-lg btn-primary shadow lift mr-3">
-                Sign up
+        <div class="col-md-10 mb-3 mt-2 px-0 text-secondary">Mongoose EP is educational platfrom, which helping you to
+            improve your IT skills, by automatically creating tasks in various categories of information technology</div>
+        <div class="row">
+            <a href="{% url 'account_signup' %}" class="button signup col-md-3 mx-3 d-flex align-items-center">
+                <span>Sign up</span>
             </a>
-            <a href="{% url 'categories' %}" class="btn-lg btn-primary-soft">Start learning</a>
+            <a href="{% url 'categories' %}" class="button startlearning col-md-3 d-flex align-items-center">Start learning</a>
         </div>
     </div>
     <div class="col-12 col-md-5 col-lg-5 order-md-2">

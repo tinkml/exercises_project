@@ -1,15 +1,28 @@
 {% block header %}
-    <div>
-        {% if user.is_authenticated %}
-            {{ user.username }} is Logged In
-            <form action="logout" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="log_out" name="log_out">
-            </form>
-        {% else %}
-            <a href="{% url 'account_signup' %}">sign up</a>
-            <a href="{% url 'account_login' %}">log in</a>
-        {% endif %}
+    <div class="row align-items-center">
+            <div class="btn-group">
+                <a class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" data-display="static">
+                    {% if user.is_authenticated %}
+                        <span class="align-top mr-2">{{ user.username }}</span>
+                    {% else %}
+                        <span class="align-top mr-2">log in</span>
+                    {% endif %}
+                <i class="fas fas-custom-login"></i>
+                </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                {% if user.is_authenticated %}
+                    <form action="logout" method="POST" class="p-0 m-0">
+                        {% csrf_token %}
+                        <button type="submit" name="log_out" class="dropdown-item">log out</button>
+                    </form>
+                    <a href="{% url 'home' %}" class="dropdown-item">home page</a>
+                {% else %}
+                    <a href="{% url 'account_signup' %}" class="dropdown-item">sign up</a>
+                    <a href="{% url 'account_login' %}" class="dropdown-item">log in</a>
+                {% endif %}
+            </div>
+            </div>
     </div>
 {% endblock %}
 

@@ -129,7 +129,7 @@ def get_task(request):
     user_answer = request.POST.get('answer')
     user_log.debug(f'[METHOD] {request.method}')
     if user_answer is None and request.method == 'POST':
-        category_url = request.POST.get('categories')
+        category_url = request.POST.get('category')
         views_log.debug(f'\n[CATEGORY] {category_url}\n')
         user_log.info(f'[USER_ID] {request.user.id} ----- [CATEGORY] {category_url}')
         if request.user.is_authenticated:
@@ -156,7 +156,7 @@ def get_task(request):
         else:
             user_log.debug(f'[USER_ID] {request.user.id} ----- [USER_IS_NOT_AUTHENTICATED]')
             solved_tasks = 0
-            level = int(request.POST.get('level'))
+            level = int(request.POST.get('emojis_level')) + 1
             user_log.info(f'[USER_ID] {request.user.id} ----- [LEVEL] {level} [SOLVED] {solved_tasks}')
 
     if user_answer:
