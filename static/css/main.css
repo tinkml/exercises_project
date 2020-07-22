@@ -1,5 +1,16 @@
+*:focus {
+    outline: none;
+}
+
 a:hover {
     text-decoration: none;
+}
+
+.annotation {
+    font-size: 16px;
+    font-weight: 500;
+    color: grey;
+    line-height: normal;
 }
 
 .btn {
@@ -8,7 +19,6 @@ a:hover {
 
 .btn:focus, .btn.focus {
     box-shadow: none;
-    outline: 0;
 }
 
 .button {
@@ -25,6 +35,14 @@ a:hover {
     transform: translate(0px, -5px);
     text-shadow: 0px 0px 18px white;
     box-shadow: 0px 2px 4px 1px #dbdcdf;
+}
+
+.button-login {
+    min-height: 45px;
+}
+
+.button-login:hover {
+    transform: scale(1.03);
 }
 
 .signup {
@@ -67,6 +85,10 @@ a:hover {
   width: 50px;
 }
 
+.emoji-login {
+    font-size: 50px;
+}
+
 .fas-custom-login {
     font-size: 25px;
     color: #007bffab;
@@ -76,24 +98,17 @@ a:hover {
     content: "\f2bd";
 }
 
-.level {
-    font-size: 14px;
-    font-stretch: normal;
-    font-weight: 700;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 1.2px;
-    color: grey;
+.form-login-input {
+    min-height: 45px;
+    border: 5px solid transparent;
+    border-radius: 5px;
+    background: #fafafa;
 }
 
 input[type=range] {
   -webkit-appearance: none;
   margin: 10px 0;
   width: 100%;
-}
-
-input[type=range]:focus {
-  outline: none;
 }
 
 input[type=range]::-webkit-slider-runnable-track {
@@ -158,4 +173,40 @@ input[type=range]::-ms-fill-upper {
   background: #007bff;
   border: 0px solid #000101;
   border-radius: 5px;
+}
+
+.line {
+    height: 2px;
+    background: #ededed;
+    width: 30%;
+}
+
+.login-error {
+    background: #ffc0c0;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #b80000;
+}
+
+.or {
+    width: 2rem;
+    display: inline-block;
+    background: #fff;
+    font-size: 15px;
+    color: #999;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.socialaccount_provider {
+    font-size: 25px;
+    color: #d7d7db;
+}
+
+.trait {
+    height: 3px;
+    background: #007bff;
+    width: 20%;
 }
