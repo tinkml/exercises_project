@@ -83,9 +83,8 @@ def show_home_page(request):
 
 def show_categories(request):
     user_log.debug(f'[USER_ID] {request.user.id} ----- [CATEGORIES]')
-    categories = Category.objects.all()
-    levels = range(1, 11)
-    return render(request, 'exercises/categories.html', {'categories': categories, 'levels': levels})
+    categories = Category.objects.all().order_by('id')
+    return render(request, 'exercises/categories.html', {'categories': categories})
 
 
 def show_task_from_url(request, category, lvl, task_url, vars_str):

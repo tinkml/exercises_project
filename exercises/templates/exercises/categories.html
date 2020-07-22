@@ -3,31 +3,41 @@
 {% block content%}
 <form action="task" class="form" method="post">
     {% csrf_token %}
-    <div class="row mb-3 d-flex justify-content-start align-items-center">
-<!--        <div class="ml-4">-->
-            <h2 class="mb-0 mx-3">Categories</h2>
-            <div class="row ml-1">
-                <div class="emoji mr-3">👶</div>
-                <div class="d-flex flex-column vertical-align-center my-auto">
-                    <span class="annotation">Level<span class="level level-number ml-1">1</span></span>
-                    <input class='emoji-range mb-0' type="range" min="0" max="4" step="1" name="emojis_level" value="0">
+    <div class="category-group row mx-0 mt-4 d-flex align-content-start justify-content-center">
+
+        <div class="category-header col-md-9 m-2 d-flex align-items-center justify-content-between">
+            <div class="col-md-6 order-md-1">
+                <h3 class="mb-2">The choice of categories</h3>
+                <p class="about">Here, you can choose any of proposed categories and set difficulty level for generated tasks.</p>
+                <div class="row ml-1">
+                    <div class="emoji mr-3">👶</div>
+                    <div class="d-flex flex-column vertical-align-center my-auto">
+                        <span class="annotation">Level<span class="level level-number ml-1">1</span></span>
+                        <input class='emoji-range mb-0' type="range" min="0" max="4" step="1" name="emojis_level" value="0">
+                    </div>
                 </div>
             </div>
-<!--        </div>-->
-    </div>
-    <div class="category-group row m-0 d-flex align-content-start">
+            <div class="col-12 col-md-5 col-lg-5 order-md-2">
+                {% load static %}
+                <img src="{% static 'images/illustration-4.png' %}" class="img-fluid mw-md-150 mw-lg-130 mb-6 mb-md-0">
+            </div>
+        </div>
+
         {% for category in categories %}
-            <div class='category col-md-4 m-2 d-flex align-items-center' data-value="{{ category.url }}">
-                <span>{{ category }}</span>
+            <div class='category col-md-3 m-2 d-flex align-items-start' data-value="{{ category.url }}">
+                <div>
+                    <div style="font-weight: 500" class="mb-2 d-flex justify-content-between">{{ category }}
+                        <div class="text-muted">{{ category.id }}</div>
+                    </div>
+                <p class="about"> {{ category.about }}</p>
+                </div>
             </div>
         {% endfor %}
-        <br/>
         <input type="hidden" id="choosen-category" name="category" value="numbers_conversion">
-        <button type="submit" name="show_task" class="button col-md-4 m-2 d-flex align-items-center">
+        <button type="submit" name="show_task" class="button col-md-3 m-2 d-flex align-items-center">
             <span class="mr-2">Let's start</span>
             <i class="fas fa-angle-double-right mt-1"></i>
         </button>
     </div>
-
 </form>
 {% endblock%}

@@ -6,6 +6,7 @@ class Category(models.Model):
     """Categories for tasks"""
     name = models.CharField(max_length=100)
     url = models.SlugField(max_length=100, unique=True, blank=True, null=True)
+    about = models.TextField(max_length=150, blank=True, null=True)
 
     def __str__(self):
         return self.name

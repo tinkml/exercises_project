@@ -1,8 +1,8 @@
 {% extends 'exercises/base.html' %}
 
 {% block content%}
-<div class="row">
-    <div class="col-12 col-md-5 col-lg-7 order-md-1 pb-4">
+<div class="row pt-4 pt-md-11 d-flex align-items-center">
+    <div class="col-12 col-md-6 col-lg-6 order-md-1 pb-4">
         <h1 class="display-4 text-center text-md-left">
             Welcome to
             <span class="text-primary">Mongoose EP</span>.
@@ -17,7 +17,7 @@
             <a href="{% url 'categories' %}" class="button startlearning col-md-3 d-flex align-items-center">Start learning</a>
         </div>
     </div>
-    <div class="col-12 col-md-5 col-lg-5 order-md-2">
+    <div class="col-12 col-md-6 col-lg-6 order-md-2">
         {% load static %}
         <img src="{% static 'images/illustration-8.png' %}" class="img-fluid mw-md-150 mw-lg-130 mb-6 mb-md-0">
     </div>
