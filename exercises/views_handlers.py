@@ -43,6 +43,7 @@ def get_random_task(category_url):
 def create_error_data(request, category_url):
     description = request.POST.get('description')
     correct_answer = request.POST.get('correct_answer')
+    category_name = request.POST.get('category_name')
     level = request.POST.get('level')
     solved_tasks = request.POST.get('solved')
     unique_url = request.POST.get('unique_url')
@@ -52,6 +53,7 @@ def create_error_data(request, category_url):
         'level': level,
         'solved': solved_tasks or 0,
         'correct_answer': correct_answer,
+        'category_name':category_name,
         'category_url': category_url,
         'unique_url': unique_url,
         'error': error}

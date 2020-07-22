@@ -2,42 +2,57 @@
 
 {% block content%}
 
-    <div class="d-flex justify-content-center">
-        <div class="col-md-6">
-            <p>Level: {{ level }}</p>
-            <p>Solved: {{ solved }}</p>
-            <h2 class="text-center">{{ description }}</h2>
-            <form action="" class="form" method="post">
-                {% csrf_token %}
-                <input type="text" value="" name="answer" class="form-control form-control-lg">
-                <input type="submit" value="send" name="send" class="btn ">
-                <input type="submit" value="return" name="return" class="btn">
-                <input type="hidden" value="{{ category_url }}" name="category_url">
-                <input type="hidden" value="{{ correct_answer }}" name="correct_answer">
-                <input type="hidden" value="{{ description }}" name="description">
-                <input type="hidden" value="{{ level }}" name="level">
-                <input type="hidden" value="{{ solved }}" name="solved">
-                <input type="hidden" value="{{ unique_url }}" name="unique_url">
-                <a class="btn" data-toggle="collapse" href="#collapseAnswer" role="button" aria-expanded="false" aria-controls="collapseAnswer">
-                Get answer</a>
-                <a class="btn" data-toggle="collapse" href="#collapseUniqueUrl" role="button" aria-expanded="false" aria-controls="collapseUniqueUrl">
-                Copy</a>
-                <div class="collapse" id="collapseAnswer">
-                {{ correct_answer }}
+    <div class="col-md-12 pt-md-12 m-2 d-flex align-items-center justify-content-center">
+        <div class="col-md-10">
+        <div class="label align-items-center mb-2 px-2 d-flex justify-content-center">{{ category_name }}</div>
+        <div class="annotation mb-3">Level: {{ level }} / Solved: {{ solved }}</div>
+        <h4 class="mb-2">{{ description }}</h4>
+        <form action="" class="form" method="post">
+            {% csrf_token %}
+            <input type="text" value=" " name="answer" class="form-control mb-3" id="answer">
+            {% if error is not None %}
+                <div class="login-error col-md-12 mb-3 p-3" role="alert" id="answer-error">
+                    {{ error }}
                 </div>
-                <div class="collapse" id="collapseUniqueUrl">
-                {{ unique_url }}
-                </div>
-            </form>
+            {% endif %}
+            <input type="hidden" value="{{ category_url }}" name="category_url">
+            <input type="hidden" value="{{ category_name }}" name="category_name">
+            <input type="hidden" value="{{ correct_answer }}" name="correct_answer">
+            <input type="hidden" value="{{ description }}" name="description">
+            <input type="hidden" value="{{ level }}" name="level">
+            <input type="hidden" value="{{ solved }}" name="solved">
+            <input type="hidden" value="{{ unique_url }}" name="unique_url">
+
+            <div class="copy-link col-md-12 mb-3 collapse" id="collapseUniqueUrl">
+            <a role="button" id="copy-link"><i class="fas fa-copy mr-2"></i></a>
+            {{ unique_url }}
+            </div>
+
+            <div class="d-flex mb-3">
+                <a class="annotation mb-1 px-2 d-flex align-items-center" role="button" href="#"
+                   id="show_answer" data-value="{{ correct_answer }}">
+                    <i class="fas fa-question mr-2"></i> Show answer
+                </a>
+                <a class="annotation collapsed mb-1 px-2 d-flex align-items-center" data-toggle="collapse"
+                   href="#collapseUniqueUrl" role="button" aria-expanded="false" aria-controls="collapseUniqueUrl">
+                    <i class="fas fa-link mr-2"></i>  Get unique task's url
+                </a>
+            </div>
+
+
+
+            <div class="d-flex">
+                <button type="submit" name="send" class="button height-40p mr-2 px-2 col-md-2">
+                    Send <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+                <a href="{% url 'categories'%}" type="button" name="return"
+                   class="button height-40p mr-2 px-2 col-md-1 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-backspace"></i>
+                </a>
+            </div>
+
+        </form>
         </div>
     </div>
-    {% if error is not None %}
-        <div class="alert alert-soft alert-dismissible fade show" role="alert">
-            {{ error }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    {% endif %}
 
 {% endblock %}

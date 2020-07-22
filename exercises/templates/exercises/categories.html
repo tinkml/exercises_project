@@ -24,9 +24,10 @@
         </div>
 
         {% for category in categories %}
-            <div class='category col-md-3 m-2 d-flex align-items-start' data-value="{{ category.url }}">
+            <div class='category col-md-3 m-2 d-flex align-items-start' data-value="{{ category.url }}" data-name="{{ category.name }}">
                 <div>
-                    <div style="font-weight: 500" class="mb-2 d-flex justify-content-between">{{ category }}
+                    <div style="font-weight: 500" class="mb-2 d-flex justify-content-between">
+                        <div>{{ category }}</div>
                         <div class="text-muted">{{ category.id }}</div>
                     </div>
                 <p class="about"> {{ category.about }}</p>
@@ -34,6 +35,7 @@
             </div>
         {% endfor %}
         <input type="hidden" id="choosen-category" name="category" value="numbers_conversion">
+        <input type="hidden" id="choosen-category-name" name="category_name" value="">
         <button type="submit" name="show_task" class="button col-md-3 m-2 d-flex align-items-center">
             <span class="mr-2">Let's start</span>
             <i class="fas fa-angle-double-right mt-1"></i>

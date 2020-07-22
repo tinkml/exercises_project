@@ -129,6 +129,7 @@ def get_task(request):
     user_log.debug(f'[METHOD] {request.method}')
     if user_answer is None and request.method == 'POST':
         category_url = request.POST.get('category')
+        category_name = request.POST.get('category_name')
         views_log.debug(f'\n[CATEGORY] {category_url}\n')
         user_log.info(f'[USER_ID] {request.user.id} ----- [CATEGORY] {category_url}')
         if request.user.is_authenticated:
@@ -161,6 +162,7 @@ def get_task(request):
     if user_answer:
         correct_answer = request.POST.get('correct_answer')
         category_url = request.POST.get('category_url')
+        category_name = request.POST.get('category_name')
         user_log.info(f'[USER_ID] {request.user.id} ----- [USER_ANSWER] {user_answer}')
         user_log.info(f'[USER_ID] {request.user.id} ----- [CORRECT_ANSWER] {correct_answer}')
         if user_answer == correct_answer:
@@ -201,7 +203,8 @@ def get_task(request):
         'solved': solved_tasks,
         'correct_answer': correct_answer,
         'category_url': category_url,
-        'unique_url': unique_url}
+        'unique_url': unique_url,
+        'category_name': category_name}
 
     views_log.debug(f'[NEW_TASKS_DATA_CREATED]\n')
     return render(request, 'exercises/task.html', context=data)

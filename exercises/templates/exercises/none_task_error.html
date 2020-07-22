@@ -1,6 +1,22 @@
 {% extends 'exercises/base.html' %}
 
 {% block content%}
-<h2>Извините, но пока нет заданий для решения в этой категории.</h2>
-<a href="{% url 'categories'%}" class="btn btn-primary"> Вернуться к выбору категории</a>
+<div class="row pt-4 pt-md-11 d-flex align-items-center">
+    <div class="col-12 col-md-7 col-lg-7 order-md-1 pb-4">
+        <h3 class="display-4 text-center text-md-left mb-3">
+            Empty category
+        </h3>
+        <div class="col-md-10 mb-4 mt-2 px-0">Sorry, there are no exercises in the selected category.
+            We're going to add them soon, in the meantime you can choose another category.</div>
+        <div class="d-flex my-3">
+            <a href="{% url 'categories'%}" class="button button-login height-50p col-md-6 d-flex align-items-center justify-content-center">
+                Return to choose category</a>
+        </div>
+    </div>
+    <div class="col-12 col-md-5 col-lg-5 order-md-2">
+        {% load static %}
+        <img src="{% static 'images/illustration-1.png' %}" class="img-fluid mw-md-150 mw-lg-130 mb-6 mb-md-0">
+    </div>
+</div>
+
 {% endblock%}
