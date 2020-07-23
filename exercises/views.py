@@ -165,7 +165,7 @@ def get_task(request):
         category_name = request.POST.get('category_name')
         user_log.info(f'[USER_ID] {request.user.id} ----- [USER_ANSWER] {user_answer}')
         user_log.info(f'[USER_ID] {request.user.id} ----- [CORRECT_ANSWER] {correct_answer}')
-        if user_answer == correct_answer:
+        if user_answer.strip() == correct_answer.strip():
             user_log.debug(f'[USER_ID] {request.user.id} ----- [SOLVED_TASK]')
             if request.user.is_authenticated:
                 USER = User.objects.get(id=request.user.id)
